@@ -1,0 +1,84 @@
+Bir klasör oluşturup onunla çalışacağız.
+Öncelikle bu klasörün içine virtual env (sanal ortam) yükleyeceğiz. Projemizin içinde her hangi bir versiyon çakışmaması olmaması için.
+Komut: python -m venv myenv( ismini biz belirliyoruz).
+Sanal ortamımızı aktifleştiriyoruz.  
+komut: env\scripts\activate
+pip : python programlama diline ait paket sistemidir
+pip freeze ile sanal ortamın içinde olanları görüyoruz.
+Sanal ortamın içerisine Django yu yüklüyoruz. 
+Komut: pip install Django
+Komut: Django-admin ile kullanabileceğimiz modüller
+Proje oluşturuyoruz
+Komut: Django-admin startproject proje_adı
+Proje dosyamız ile proje ve uygulamaları kapsayan ismi farklı yapmak karışıklığı önler!
+Proje dosyasına girip projeyi ayağa kaldırıyoruz.
+Komut: python manage.oy runserver
+________________________________________________
+GITHUB:
+Github sayfamızda repository oluşturduktan sonra :
+echo "# smartedu" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/personelio/smartedu.git
+git push -u origin main
+Github Push:
+git remote add origin https://github.com/personelio/smartedu.git
+git branch -M main
+git push -u origin main
+--
+Gitignore dosyası oluşturuyoruz
+gitignore.com'a gidip django yazıp hazır dosyayı .gitignore diye projenin altına kaydediyoruz.
+sonra vscode için gerekli https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore 
+bunu da gitignore en altına kaydediyoruz.
+Ana projede Lokalde git repository oluşturacağız.
+Komut: git init
+dosyalarımızı ekliyoruz
+Komut: git add .
+git status ile ne yaptık bakıyoruz
+repository bağlanıyoruz
+Komut: git remote add origin https://github.com/personelio/smartedu.git
+Komut: git branc -M main
+Komut: git push -u origin main
+________________________________________________
+Uygulama oluşturuyoruz. Uygulamalar başka projeler içinde kullanılabilir.
+Komut: python manage.py startapp proje_adımız
+__init__.py uygulamamızın modül olarak görünmesini sağlar
+admin.py 
+apps.py ayar dosyamız
+models.py db tablolarını oluşturmak için kullandığımız dosyamız
+tests.py uygulamanın test yazılması için kullanılır
+
+Uygulamamızı (pages) projemize(smartedu) kaydetmemiz gerekiyor.
+settings.py içinde INSTALLED_APP'e
+** Uygulamalar setting.py da kayıt sırasına göre çalışır.
+
+*Bu şekilde yapmıyoruz* Uygulamamıza ilk Views.py (pages) fonksiyonu (ilk istek fonksiyonu) yazıyoruz.
+projemizde ki (smartedu) urls.py gidip yeni bir path ekliyoruz
+sonra pages import ediyoruz.
+
+Uygulamamıza urls.py dosyası oluştururuz.
+olduğumuz dizinden views import ediyoruz
+Komut: from . import views 
+
+daha sonra ana projemizde ki (smartedu) urls.py de include ekliyoruz
+Komut: from django.urls import path, include
+sonra path ekliyoruz
+Komut: path('', include('pages.urls')), 
+
+Kök dizinde iken (www.siteadresi.com) gelen istek projenin urls.py dosyasına gelir.
+Oradan isteğe dönen cevap uygulamanın (pages) urls.py dosyasına gitmesini söyler.
+Uygulamanın urls.py dosyasında giden istekten dönen cevap uygulamanın(pages) views dosyasında ki index fonksiyonuna bakmasını söyler.
+İstek views dosyası içinde index fonksiyonuna bakar ve cevap döndürür.  
+
+Template Yapısı
+Django uygulamaların içinde ki template klasörlerine bakar. Eğer varsa onun içinden gelen dönüşü yayınlar. Ancak bu şekilde ilerlemeyeceğiz.
+Her bir uygulama için ayrı template oluşturmak yerine tüm proje için genel bir template klasörü oluşturacağız.
+Genel projemizin altına (smartedu) templates klasörü oluşturuyoruz. 
+Projemizin settings dosyasına templates yolumuzu belirtiyoruz.
+Komut: 'DIRS': [os.path.join(BASE_DIR, 'templates')], 
+ekledikten sonra os'u import etmemiz gerekiyor.
+Komut: import os (settings.py en üstüne)
+
+
