@@ -81,4 +81,44 @@ Komut: 'DIRS': [os.path.join(BASE_DIR, 'templates')],
 ekledikten sonra os'u import etmemiz gerekiyor.
 Komut: import os (settings.py en üstüne)
 
+Web Projemize ait image, css, js vb. dosyaları static klasörümüzde kullanacağız.
+static klasörümüzü projemizin (smartedu) setting.py dosyasında yolunu belirtmemiz gerekiyor.
+Komut: STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+daha sonra css, js image vb dosyaları static dosyamıza taşıyoruz
+daha sonra bu dosyaları templates içinde ki html sayfamızdan ulaşmak için;
+Komut:  {% load static %} ekliyoruz.
 
+static dosyalara ulaşmak için {% static 'src="css/min.css" '%} 
+
+Html sayfalarımızda tekrar eden içerikleri statik olarak alabilmek için base oluşturacağız.
+Böylelikle her html sayfamız için tekrar tekrar düzenlemeye gerek kalmaz.
+Templates klasörümüzün altına partials klasörü oluşturuyoruz.
+altına _base.html oluşturuyoruz.
+daha sonra sabit olanları parçalıyoruz.
+_footer.html
+_navbar.html
+_header.html gibi
+
+_base.html içeriği
+#static dosyaları çekmek için (css js image vb.)
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Disaster Coordination Center</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+		<noscript><link rel="stylesheet" href="{% static 'css/noscript.css' %}" /></noscript>
+	</head>
+{% include 'partials/_navbar.html'%}
+{% block content %}
+    
+{% endblock %}
+{% include 'partials/_footer.html' %}
+            <!-- Scripts -->
+                <script src="{% static 'js/jquery.min.js' %}"></script>
+    </body>
+    </html>
+    
+	
