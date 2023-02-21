@@ -98,7 +98,7 @@ daha sonra sabit olanları parçalıyoruz.
 _footer.html
 _navbar.html
 _header.html gibi
-
+________________________________________________
 _base.html içeriği
 #static dosyaları çekmek için (css js image vb.)
 {% load static %}
@@ -120,5 +120,97 @@ _base.html içeriği
                 <script src="{% static 'js/jquery.min.js' %}"></script>
     </body>
     </html>
-    
-	
+
+
+Index.html
+{% extends 'partials/_base.html' %}
+{% load static %}
+
+{% block content %}
+sabit kalacak içerikleri
+{% endbloc %}
+
+_navbar.html içeriği
+
+{% load static %}
+navbara ait etiketler
+
+
+________________________________________________
+Django ORM sayaseninde oluşturduğumuz class'lar django tarafından otomatik olarak sql komutlarına çevirir.
+Models Yapısı  
+from django.db import models
+
+class Course(models.Model):
+    name = models.CharField(max_length=200, unique=True, verbose_name= "Kurs Adı", help_text="Kursun Adını Giriniz")
+    description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to="courses/%Y/%m/%d/", default ="courses/pic01.jpg")
+    date = models.DateTimeField(auto_now=True)
+    available = models.BooleanField(default=True)
+
+    komut: python manage.py makemigrations ile model dosyası oluşturuluyor.
+    python manage.py migrate veritabanına model uygulanıyor
+
+    Modelimizi admin alanında tanıtmamız lazım.
+    Yol: courses/admin.py
+    Komut: from . models import Course
+
+    admin.site.register(Course)
+     course ait medya içerikleri kendi altında media klasörüne yüklenmesi için smartedu/settings.py da yolunu ve tanıtımını yapıyoruz
+     Komut:
+    #MEDIA FILES
+
+MEDIA_URL ="/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+media kalsörüne yüklediklerimize ulaşmak için smartedu/urls.py da :
+
+from django.conf import settings
+from django.conf.urls.static import static
+...
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+Kursun adının doğru görünmesi için Str fonksiyonu yazıyoruz
+Komut:
+    def __str__(self):
+        return self.name
+
+Admin Alanını Düzenleme:
+
+@admin.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ('name', 'available') #kursları adı ve  başka özelliğine göre listeleme
+    list_filter = ('available',) #listeleme
+    search_fields = ('name','date') #tarihe göre arama
+
+
+QUERY setleri sql kodu yazmak yerine kullanılabilir.
+
+Admin alanında ki içeriği template üzerinde göstereceğiz:
+
+templates klasörünün altına istediğimiz html sayfasını yapıştırıyoruz.
+Ana projemizde (smartedu) urls.py path'i yazacağız
+
+Komut: path('courses/', include('courses.urls')),
+courses uygulamamıza urls.py oluşturuyoruz. 
+Komut: 
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.course_list, name="courses"), (navbar da name='courses' kullanacağız.)
+    #path (route, view, option(kısayol ismi))
+]
+courses uygulamamızda views.py oluşturuyoruz.
+Komut:
+from django.shortcuts import render
+from . models import Course
+
+def course_list(request):
+    courses = Course.objects.all().order_by('-date')
+    context = {
+        'courses': courses
+    }
+    return render(request, 'courses.html', context)
+
+
